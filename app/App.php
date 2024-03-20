@@ -40,8 +40,29 @@ function readTransactionsFromCsvFiles(string $fileName): array
     $transactions = [];
 
     while (($transactionsData = fgetcsv($csvFile)) !== false) {
-        $transactions[] = $transactionsData;
+        $transactions[] = formatTransactionData($transactionsData);
     }
 
     return $transactions;
+}
+
+
+/**@formatTransactionData : Formats the transactions data, removes [$, ','] from amount.
+ * @param array $transactionData : Transaction data to be formatted
+ * @return array : A formatted transactions data
+ */
+function formatTransactionData(array $transactionData): array
+{
+    [$date, $checkNumber, $description, $amount] = $transactionData;
+
+    // format the amount properly
+    $amount = (float)str_replace(['$', ','], '',  $amount);
+
+
+    return [
+        'date' => $date,
+        'checkNumber' => $checkNumber,
+        'description' => $description,
+        'amount' => $amount,
+    ];
 }
