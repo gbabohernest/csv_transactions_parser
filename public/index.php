@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 $root = dirname(__DIR__) . DIRECTORY_SEPARATOR;
 
@@ -18,7 +18,10 @@ $transactionsFiles = getCsvTransactionFiles(FILES_PATH);
 $allTransactions = [];
 
 foreach ($transactionsFiles as $file) {
-    $allTransactions = array_merge($allTransactions, readTransactionsFromCsvFiles($file));
+    $allTransactions = array_merge($allTransactions, readTransactionsFromCsvFiles($file, 'formatTransactionData'));
 }
 
 //print_r($allTransactions);
+
+//pass the allTransactions to the view
+require VIEWS_PATH . "transactions.php";

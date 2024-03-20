@@ -25,9 +25,10 @@ function getCsvTransactionFiles(string $dirPath): array
 /**
  * @readTransactionsFromCsvFiles : Read and extract transaction(s) data from csv file(s).
  * @param string $fileName : Name of the csv transaction file.
+ * @param callable|null $transactionsHandler - Handles transactions of different format if any.
  * @return array : Array of extracted transactions data.
  */
-function readTransactionsFromCsvFiles(string $fileName): array
+function readTransactionsFromCsvFiles(string $fileName, ?callable $transactionsHandler = null): array
 {
     if (!file_exists($fileName)) {
         trigger_error('File' . $fileName . 'does not exists!!', E_USER_ERROR);
@@ -40,7 +41,10 @@ function readTransactionsFromCsvFiles(string $fileName): array
     $transactions = [];
 
     while (($transactionsData = fgetcsv($csvFile)) !== false) {
-        $transactions[] = formatTransactionData($transactionsData);
+        if ($transactionsHandler !== null) {
+            $transactionsData = $transactionsHandler($transactionsData);
+        }
+        $transactions[] = $transactionsData;
     }
 
     return $transactions;
@@ -56,7 +60,7 @@ function formatTransactionData(array $transactionData): array
     [$date, $checkNumber, $description, $amount] = $transactionData;
 
     // format the amount properly
-    $amount = (float)str_replace(['$', ','], '',  $amount);
+    $amount = (float)str_replace(['$', ','], '', $amount);
 
 
     return [
