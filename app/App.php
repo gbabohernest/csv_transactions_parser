@@ -70,3 +70,26 @@ function formatTransactionData(array $transactionData): array
         'amount' => $amount,
     ];
 }
+
+
+/**
+ * @calculateTotal: Calculates the net total, total income and total expenses of transactions
+ * @param array $allTransactions : An array of all the transactions
+ * @return int[] : An integer array of all totals values
+ */
+function calculateTotal(array $allTransactions): array
+{
+    $totalValues = ['netTotal' => 0, 'totalIncome' => 0, 'totalExpense' => 0];
+
+    foreach ($allTransactions as $transaction) {
+        $totalValues['netTotal'] += $transaction['amount'];
+
+        if ($transaction['amount'] >= 0) {
+            $totalValues['totalIncome'] += $transaction['amount'];
+        } else {
+            $totalValues['totalExpense'] += $transaction['amount'];
+        }
+    }
+
+    return $totalValues;
+}
