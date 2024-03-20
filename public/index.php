@@ -9,7 +9,8 @@ define('FILES_PATH', $root . 'transaction_files' . DIRECTORY_SEPARATOR);
 define('VIEWS_PATH', $root . 'views' . DIRECTORY_SEPARATOR);
 
 
-require APP_PATH . "App.php";
+require APP_PATH . 'App.php';
+require APP_PATH . 'utilities.php';
 
 $transactionsFiles = getCsvTransactionFiles(FILES_PATH);
 //var_dump($transactionsFiles);
@@ -23,5 +24,7 @@ foreach ($transactionsFiles as $file) {
 
 //print_r($allTransactions);
 
+$total = calculateTotal($allTransactions);
+
 //pass the allTransactions to the view
-require VIEWS_PATH . "transactions.php";
+require VIEWS_PATH . 'transactions.php';
